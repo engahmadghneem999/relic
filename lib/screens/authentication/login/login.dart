@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:relic/auth/facebook_auth.dart';
-import 'package:relic/auth/google_signup.dart';
+import 'package:relic/firebase_auth/facebook_auth.dart';
+import 'package:relic/firebase_auth/google_signup.dart';
 import 'package:relic/core/constant/const_data.dart';
 import 'package:relic/core/constant/image_strings.dart';
 import 'package:relic/core/constant/shared_preferences_keys.dart';
@@ -10,7 +10,7 @@ import 'package:relic/core/service/service.dart';
 import 'package:relic/screens/authentication/forget_password/forget_pass.dart';
 import 'package:relic/screens/authentication/login/controller/login_function.dart';
 import 'package:relic/screens/authentication/sign_up/sign_up.dart';
-import 'package:relic/screens/home/home_screen/home_screen.dart';
+import 'package:relic/widgets/bottom_nav_bar.dart';
 import 'package:relic/widgets/back_btn/back_btn.dart';
 import '../../../core/constant/size.dart';
 import '../../../core/constant/text_strings.dart';
@@ -30,24 +30,35 @@ TextEditingController passwordController = TextEditingController() ;
 
 class _LoginState extends State<Login> {
 
-
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> formKey = GlobalKey<FormState>() ;
-    validate(){
-      var  formData = formKey.currentState ;
-      if(formData!.validate())
-      {
-           signInWithEmailAndPassword(emailController.text, passwordController.text) ;
+    validate() async {
+      var formData = formKey.currentState;
+      if (formData!.validate()) {
+        setState(() {
+          isLoading = true; // Set isLoading to true to show the loading indicator
+        });
 
-           Get.offAll(HomeScreen());
-           Get.find<MyServices>().sharedPreferences
-               .setBool(SharedPreferencesKeys.isLoginKey, true);
-           ConstData.isLogin==true;
+        try {
+          await signInWithEmailAndPassword(emailController.text, passwordController.text);
 
-      } else
-      {
-        return 'Something is wrong' ;
+          // Navigate to the next screen if login is successful
+          Get.offAll(const BottomVavBar());
+          Get.find<MyServices>().sharedPreferences
+              .setBool(SharedPreferencesKeys.isLoginKey, true);
+          ConstData.isLogin == true;
+        } catch (error) {
+          // Handle any errors that occur during login
+          print('Error logging in: $error');
+        }
+
+        setState(() {
+          isLoading = false; // Set isLoading back to false after login attempt is complete
+        });
+      } else {
+        return 'Something is wrong';
       }
     }
     return Scaffold(
@@ -165,11 +176,14 @@ class _LoginState extends State<Login> {
                                   borderRadius: BorderRadius.circular(10)),
                             ),
                             onPressed: validate,
-                            child: const Text(
-                              MyTexts.signIn,
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: MySize.fontSizeMd),
-                            )),
+                            child: isLoading
+                            ? const CircularProgressIndicator(
+                              color:  Colors.white,
+                            )  : const Text(
+                        MyTexts.signIn,
+                        style: TextStyle(
+                            color: Colors.white, fontSize: MySize.fontSizeMd),
+                      ),),
                       ),
                       const SizedBox(
                         height: MySize.spaceBtwSections,

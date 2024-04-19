@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:relic/auth/facebook_auth.dart';
-import 'package:relic/auth/google_signup.dart';
+import 'package:relic/firebase_auth/facebook_auth.dart';
+import 'package:relic/firebase_auth/google_signup.dart';
 import 'package:relic/core/constant/const_data.dart';
 import 'package:relic/core/constant/image_strings.dart';
 import 'package:relic/core/constant/shared_preferences_keys.dart';
@@ -9,7 +9,7 @@ import 'package:relic/core/constant/size.dart';
 import 'package:relic/core/service/service.dart';
 import 'package:relic/screens/authentication/login/login.dart';
 import 'package:relic/screens/authentication/sign_up/controller/sign_up_function.dart';
-import 'package:relic/screens/home/home_screen/home_screen.dart';
+import 'package:relic/widgets/bottom_nav_bar.dart';
 import 'package:relic/widgets/back_btn/back_btn.dart';
 import 'package:relic/widgets/page_title/page_title.dart';
 import 'package:relic/widgets/social_btn/social_btn.dart';
@@ -30,24 +30,36 @@ class _SignUpState extends State<SignUp> {
   TextEditingController userController = TextEditingController() ;
   TextEditingController emailController = TextEditingController() ;
   TextEditingController passwordController = TextEditingController() ;
-
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> formKey = GlobalKey<FormState>() ;
-    validate(){
-      var  formData = formKey.currentState ;
-      if(formData!.validate() && checkBoxVal)
-      {
-        createUserWithEmailAndPassword(emailController.text , passwordController.text,userController.text) ;
-        Get.offAll(HomeScreen());
-        Get.find<MyServices>().sharedPreferences
-            .setBool(SharedPreferencesKeys.isLoginKey, true);
-        ConstData.isLogin==true;
+    validate() async {
+      var formData = formKey.currentState;
+      if (formData!.validate() && checkBoxVal) {
+        setState(() {
+          isLoading = true; // Set isLoading to true to show the loading indicator
+        });
 
-      } else
-      {
-        return 'Something is wrong' ;
+        try {
+          await createUserWithEmailAndPassword(emailController.text, passwordController.text, userController.text);
+
+          // Navigate to the next screen if sign-up is successful
+          Get.offAll(const BottomVavBar());
+          Get.find<MyServices>().sharedPreferences
+              .setBool(SharedPreferencesKeys.isLoginKey, true);
+          ConstData.isLogin == true;
+        } catch (error) {
+          // Handle any errors that occur during sign-up
+          print('Error signing up: $error');
+        }
+
+        setState(() {
+          isLoading = false; // Set isLoading back to false after sign-up attempt is complete
+        });
+      } else {
+        return 'Something is wrong';
       }
     }
     return Scaffold(
@@ -224,11 +236,14 @@ class _SignUpState extends State<SignUp> {
                               borderRadius: BorderRadius.circular(10)),
                         ),
                         onPressed: validate,
-                        child: const Text(
+                        child: isLoading
+                            ? const CircularProgressIndicator(
+                          color: Colors.white,
+                        )   : const Text(
                           MyTexts.signUp,
                           style: TextStyle(
                               color: Colors.white, fontSize: MySize.fontSizeMd),
-                        )),
+                        ),),
                   ),
                   const SizedBox(
                     height: MySize.spaceBtwSections,

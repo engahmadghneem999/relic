@@ -4,7 +4,7 @@ import 'package:relic/binding/initial_bindings.dart';
 import 'package:relic/core/constant/shared_preferences_keys.dart';
 import 'package:relic/core/service/service.dart';
 import 'package:relic/screens/authentication/welcome/welcome.dart';
-import 'package:relic/screens/home/home_screen/home_screen.dart';
+import 'package:relic/widgets/bottom_nav_bar.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key});
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       initialBinding: InitialBindings(),
-      home: isLoggedIn ? HomeScreen() : Welcome(),
+      home: isLoggedIn ? const BottomVavBar() : const Welcome(),
     );
   }
 }

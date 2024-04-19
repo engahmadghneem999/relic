@@ -15,7 +15,7 @@ class Crud {
     try {
 
       if (await checkInternet()) {
-        print("crud checkinternet");
+        print("crud check internet");
         var response = await http.post(
           Uri.parse(linkUrl),
           body: jsonEncode(data),

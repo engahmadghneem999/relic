@@ -10,7 +10,7 @@ import 'package:relic/core/service/service.dart';
 import 'package:relic/screens/authentication/forget_password/forget_pass.dart';
 import 'package:relic/screens/authentication/login/controller/login_function.dart';
 import 'package:relic/screens/authentication/sign_up/sign_up.dart';
-import 'package:relic/screens/home/home_screen/home_screen.dart';
+import 'package:relic/widgets/bottom_nav_bar.dart';
 import 'package:relic/widgets/back_btn/back_btn.dart';
 import '../../../core/constant/size.dart';
 import '../../../core/constant/text_strings.dart';
@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
       {
            signInWithEmailAndPassword(emailController.text, passwordController.text) ;
 
-           Get.offAll(HomeScreen());
+           Get.offAll(const BottomVavBar());
            Get.find<MyServices>().sharedPreferences
                .setBool(SharedPreferencesKeys.isLoginKey, true);
            ConstData.isLogin==true;

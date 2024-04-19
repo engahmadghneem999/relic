@@ -8,6 +8,8 @@ class History extends StatelessWidget {
     return  Scaffold(
       appBar: AppBar(
         title: const Text('HISTORY'),
+        backgroundColor: Color(0xFF009B8D),
+        centerTitle: true,
       ),
     );
   }

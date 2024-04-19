@@ -8,6 +8,8 @@ class Tourist extends StatelessWidget {
     return  Scaffold(
       appBar: AppBar(
         title: const Text('TOURIST'),
+        backgroundColor: Color(0xFF009B8D),
+        centerTitle: true,
       ),
     );
   }

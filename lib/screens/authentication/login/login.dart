@@ -42,13 +42,10 @@ class _LoginState extends State<Login> {
         });
 
         try {
-          await signInWithEmailAndPassword(emailController.text, passwordController.text);
+          await signInWithEmailAndPassword(emailController.text, passwordController.text , context);
 
           // Navigate to the next screen if login is successful
-          Get.offAll(const BottomVavBar());
-          Get.find<MyServices>().sharedPreferences
-              .setBool(SharedPreferencesKeys.isLoginKey, true);
-          ConstData.isLogin == true;
+
         } catch (error) {
           // Handle any errors that occur during login
           print('Error logging in: $error');

@@ -1,46 +1,32 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:relic/screens/authentication/welcome/welcome.dart';
-import '../../../core/constant/size.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../../widgets/my_appbar/my_appbar.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14,
+  );
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFF009B8D),
-        centerTitle: true,
-        title: const Text('HOME'),
-      ),
-      body:Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: 60,
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF009B8D),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                  onPressed: ()=> Get.offAll(()=> const Welcome()),
-                  child: const Text(
-                    'Logout',
-                    style: TextStyle(
-                        color: Colors.white, fontSize: MySize.fontSizeMd),
-                  )),
-            ),
-            const SizedBox(
-              height: MySize.spaceBtwSections,
-            ),
-          ],
-        ),
-      )
-    );
+        appBar: const MyAppbar(),
+        body: GoogleMap(
+          mapType: MapType.terrain,
+          initialCameraPosition: _kGooglePlex,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+        ));
   }
 }
+
+//AIzaSyDGf2lGfA6u7rAWEVA_qbyeFLS-DGtc-6I

@@ -3,6 +3,8 @@
         android:label="relic"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDGf2lGfA6u7rAWEVA_qbyeFLS-DGtc-6I"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

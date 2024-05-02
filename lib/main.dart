@@ -3,10 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:relic/firebase_options.dart';
 import 'app.dart';
 import 'core/service/service.dart';
+import 'package:camera/camera.dart';
+
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

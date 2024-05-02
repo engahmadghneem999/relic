@@ -9,12 +9,12 @@ import 'package:relic/core/constant/size.dart';
 import 'package:relic/core/service/service.dart';
 import 'package:relic/screens/authentication/login/login.dart';
 import 'package:relic/screens/authentication/sign_up/controller/sign_up_function.dart';
-import 'package:relic/widgets/bottom_nav_bar.dart';
 import 'package:relic/widgets/back_btn/back_btn.dart';
 import 'package:relic/widgets/page_title/page_title.dart';
 import 'package:relic/widgets/social_btn/social_btn.dart';
 
 import '../../../core/constant/text_strings.dart';
+import '../../../widgets/bottom_nav_bar.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -46,7 +46,7 @@ class _SignUpState extends State<SignUp> {
           await createUserWithEmailAndPassword(emailController.text, passwordController.text, userController.text);
 
           // Navigate to the next screen if sign-up is successful
-          Get.offAll(const BottomVavBar());
+          Get.offAll(const BottomNavBar());
           Get.find<MyServices>().sharedPreferences
               .setBool(SharedPreferencesKeys.isLoginKey, true);
           ConstData.isLogin == true;
